@@ -322,6 +322,7 @@ def train(args, config, model, device, loaders, node_counts):
     print('batchsize:', config['train']['batchsize'])
     print('coordinate sampling frequency:', config['train']['coor_sampling_freq'])
     print('learning rate:', config['train']['base_lr'])
+    debug_print = bool(config['train'].get('debug_print', False))
 
     train_loader, val_loader, test_loader = loaders
 
@@ -500,7 +501,7 @@ def train(args, config, model, device, loaders, node_counts):
                 # =========================================================
                 # [插入] 调试探针：检查进入 Loss 计算前的 PDE 点状态
                 # =========================================================
-                if batch_idx == 0 and e == 0:  # 只在第一个 Epoch 的第一个 Batch 打印一次，防止刷屏
+                if debug_print and batch_idx == 0 and e == 0:  # 只在第一个 Epoch 的第一个 Batch 打印一次，防止刷屏
                     print(f"\n======== DEBUG: Inside Training Loop (Before Loss) ========")
                     print(f"1. PDE Coordinates (x_pde):")
                     print(f"   - Shape: {x_pde.shape}")
@@ -520,7 +521,7 @@ def train(args, config, model, device, loaders, node_counts):
                     # =========================================================
                     # [全方位调试探针] 检查所有类型的点
                     # =========================================================
-                    if batch_idx == 0 and e == 0:
+                    if debug_print and batch_idx == 0 and e == 0:
                         print(f"\n======== DEBUG: Data & Prediction Inspection (Epoch 0, Batch 0) ========")
 
                         def inspect_tensor(name, tensor):
